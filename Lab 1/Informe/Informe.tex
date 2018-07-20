@@ -1,0 +1,350 @@
+% !TeX spellcheck = <es_ANY>
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{amsmath}
+
+% Title Page
+\title{Programación Lógica \\ Laboratorio 1 - Informe}
+\author{
+	Javier Morales\\
+	4.780.020-9\\
+	\and
+	Javier Pérez\\
+	4.697.236-2
+	\and
+	Melisa Techera\\
+	5.138.335-4
+}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+\section{Eficiencia}
+
+Todas las pruebas realizadas en una de las computadoras de facultad (Sala UDELAR D).
+
+\subsection{Matrices I+J}
+
+Se prueba la creación de una matriz NxN fija en un valor, y luego se aplica nuevo\_valor\_celda para cada fila y columna. Para generar el comando que invoca al cambio de valor se utilizó javascript, dado que es un número grande de llamados.
+
+\begin{table}[h!]
+	\begin{center}
+		\caption{Eficiencia nuevo valor celda}
+		\label{tab:table1}
+		\begin{tabular}{l|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+			\textbf{$N$} & \textbf{t(s)}\\
+			\hline
+			25 & 0.000 \\
+			50 & 0.406 \\
+			100 & 7.942 \\
+			150 & -* \\
+			200 & -* \\
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\emph{*:} Error, out of local stack, demasiadas llamadas.
+\newpage
+\subsection{Cuadrado Latino}
+
+Se prueba cuadrado latino con el predicado time/1, hasta el primer resultado.
+
+\begin{table}[h!]
+	\begin{center}
+		\caption{Eficiencia cuadrado latino}
+		\label{tab:table1}
+		\begin{tabular}{l|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+			\textbf{$N$} & \textbf{t(s)}\\
+			\hline
+			1 & 0.000 \\
+			2 & 0.000 \\
+			3 & 0.000 \\
+			4 & 0.000 \\
+			5 & 31.403 \\
+			6 & $>$1000 \\		
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Para $N=6$ la ejecución demora más de quince minutos. Conjeturamos que esto se debe a la naturaleza exponencial de las permutaciones (al ser $n!$ permutaciones, iterar sobre ellas tiene orden exponencial.) Latino hace múltiples llamadas a permutaciones, por lo que el aumento drástico es esperable.
+
+\newpage
+\subsection{Cuadrado Grecolatino}
+
+Se prueba cuadrado grecolatino con el predicado time/1, hasta el primer resultado.
+
+\begin{table}[h!]
+	\begin{center}
+		\caption{Eficiencia cuadrado grecolatino}
+		\label{tab:table1}
+		\begin{tabular}{l|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+			\textbf{N} & \textbf{t(s)}\\
+			\hline
+			1 & 0.000 \\
+			2 & 0.000* \\
+			3 & 0.000 \\
+			4 & 5.538 \\
+			5 & 177.245 \\
+			6 & $>$1000 \\		
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\emph{*:} no se encontró solución (retorna false), porque no existen cuadrados grecolatinos de orden 2.
+
+Para grecolatino el problema se agrava pues latino es invocado múltiples veces por él.
+
+
+
+
+
+%\section{Ejercicio 1}
+%
+%Se relaja el problema a programación lineal encontrándose el óptimo 28/3 en $x_1=8/3$, $x_2=4/3$.
+%
+%Se obtiene la cota inferior $\underline{z}=28/3$. Como cota superior inicial se toma $\overline{z}=+\infty$.
+%
+%$x_1$ es una variable básica no entera en la solución (vale 8/3). Se tienen entonces dos subproblemas a resolver, uno agregando la restricción $x_1 \leq 2$ y otro agregando $x_1 \geq 3$.
+%
+%Por la primer rama, se encuentra la solución entera (2,2) con valor 10. Se ajusta la cota superior, $\overline{z}=10$.
+%
+%Por la segunda, se encuentra la solución no entera (3,5/4) con valor 39/4. Como está entre las cotas, no puede podarse. Se agregan entonces dos subproblemas, uno con $x_2 \leq 1$ y otro con $x_2 \geq 2$.
+%
+%Por la rama $x_2\leq1$, la solución óptima es (4,1) con valor 11, que no es mejor que la cota superior $\overline{z}$. Se poda por acotamiento.
+%
+%Por la rama restante, la solución óptima del problema relajado es (3,2) con valor 12, que también se poda por acotamiento. 
+%
+%La solución final está entonces en (2,2) con valor 10.
+%
+%
+%
+%
+%\section{Ejercicio 2}
+%
+%\subsubsection*{Condiciones Lógicas}
+%
+%De (1), si $x_4=1$, $x_3$ también.
+%
+%\[ x_4 \leq x_3 \qquad (4) \]
+%
+%De (2), si $x_3=0$, todas las demás variables son cero. La última ecuación es repetida (4).
+%
+%\[ x_1 \leq x_3 \qquad (5) \]
+%\[ x_2 \leq x_3 \qquad (6) \]
+%
+%De (3), si $x_4=1$, entonces $x_2=1$ y $x_3=1$. La segunda ecuación es repetida (4).
+%
+%\[ x_4 \leq x_2 \qquad (7) \]
+%
+%De (3), si $x_1=1$, el problema no es factible.
+%
+%\[ x_1 = 0 \qquad (8) \]
+%
+%De (2), si $x_2=1$ y $x_4=1$, el problema no es factible.
+%
+%\[ x_2 + x_4 \leq 1 \qquad (9) \]
+%
+%De (3), si $x_2=0$ y $x_3=0$ el problema no es factible.
+%
+%\[ x_2 + x_3 \geq 1 \qquad (10) \]
+%
+%De (6) y (10), si $x_3=0$ el problema no es factible.
+%
+%\[ x_3=1 \qquad (11) \]
+%
+%De (7) y (9) se deduce que si $x_4=1$ el problema no es factible.
+%
+%\[ x_4=0 \qquad (12)\]
+%
+%\subsubsection*{Resolución}
+%
+%Una vez fijas $x_1$, $x_3$ y $x_4$, es evidente que el conjunto factible del problema es ${(0,0,1,0), (0,1,1,0)}$.
+%	
+%Un conjunto minimal de restricciones es
+%\[ x_1=0, x_3=1, x_4=0\].
+%
+%Como el término correspondiente a $x_2$ en la función objetivo es negativo, en (0,0,1,0) se alcanza el óptimo con un valor de 3.
+%
+%
+%	
+%\section{Ejercicio 3}
+%
+%\subsection*{a}
+%
+%Despejando $x_1$:
+%
+%\[ 5x_1 + 11x_2 \leq 29 \Rightarrow x_1 + \frac{11}{5}x_2 \leq \frac{29}{5} \] 
+%
+%Tomando función piso en $11/5$.
+%
+%\[ x_1 + 2x_2 \leq x_1 + \frac{11}{5}x_2 \leq \frac{29}{5} \]
+%
+%Como la valoración es entera, se toma función piso en $29/5$.
+%
+%\[ x_1 + 2x_2 \leq 5 \]
+%
+%Despejando $x_2$:
+%
+%\[ 5x_1 + 11x_2 \leq 29 \Rightarrow \frac{5}{11}x_1 + x_2 \leq \frac{29}{11} \]
+%
+%Aplicando función piso en los términos fraccionarios de la misma forma que anteriormente,
+%
+%\[ x_2 \leq 2 \]
+%
+%\subsubsection*{b}
+%
+%Siguiendo un procedimiento análogo al anterior (dividir por el coeficiente, luego aplicar función piso porque es una restriccion de menor o igual), despejando $x_1$:
+%
+%\[ x_1 \leq 2 \]
+%
+%Para $x_2$:
+%
+%\[ x_1 + x_2 \leq 5 \]
+%
+%\subsubsection*{c}
+%
+%Según las diapositivas del curso, el primer paso del procedimiento, para este problema, es:
+%
+%\[ \frac{1}{18}(5x_1 + 11x_2) + \frac{1}{18}(13x_1 + 7x_2) \leq \frac{29}{18} + \frac{37}{18} \]
+%
+%\[ x_1 + x_2 \leq \frac{66}{18} \]
+%
+%El segundo paso, aplicar función piso a los coeficientes de $x_i$ se saltea pues ya son enteros.
+%
+%Aplicando el tercer paso se obtiene la ecuación
+%
+%\[ x_1 + x_2 \leq 3 \]
+%
+%\subsubsection*{d}
+%
+%Analizando gráficamente las cinco ecuaciones obtenidas para el problema:
+%
+%\begin{tikzpicture}
+%\begin{axis}[ 
+%xtick = {0,1,...,3},
+%ytick = {0,1,...,3},
+%grid = both,
+%xmin = 0,
+%xmax = 3,
+%ymin = 0,
+%ymax = 3,
+%xlabel=$x_1$,
+%ylabel={$x_2$}
+%] 
+%\addplot[mark=none] {5/2 - x/2}; 
+%\addplot[mark=none] {2}; 
+%\addplot[mark=none] coordinates {(2, 0) (2, 3)};
+%\addplot[mark=none] {5 - x}; 
+%\addplot[mark=none] {3 - x}; 
+%\addplot[mark=none, color=lightgray] {29/11 -5*x/11}; 
+%\addplot[mark=none, color=lightgray] {37/7 -13*x/7}; 
+%\addplot[mark=*] coordinates {(0,0)};
+%\addplot[mark=*] coordinates {(1,0)};
+%\addplot[mark=*] coordinates {(2,0)};
+%\addplot[mark=*] coordinates {(0,1)};
+%\addplot[mark=*] coordinates {(1,1)};
+%\addplot[mark=*] coordinates {(1,2)};
+%\addplot[mark=*] coordinates {(2,1)};
+%\addplot[mark=*] coordinates {(0,2)};
+%\end{axis}
+%\end{tikzpicture}
+%
+%Se muestran las restricciones originales en gris y los puntos del casco convexo.
+%
+%El mismo queda determinado por 
+%
+%\[ x_1 + x_2 \leq 3 \]
+%
+%\[ x_1 \leq 2 \]
+%
+%\[ x_2 \leq 2 \]
+%
+%\newpage
+%
+%\section{Ejercicio 2}
+%\subsection*{a}
+%
+%Analizando gráficamente las restricciones del problema queda determinado el conjunto de soluciones factibles.
+%
+%
+%Si llamamos $f$ a la función objetivo, $f(x_1, x_2) = 2x_1 + x_2$, se obtienen los siguientes valores funcionales:
+%
+%\[ f(0,0) = 0 \]
+%\[ f(1,0) = 2 \]
+%\[ f(2,0) = 4 \]
+%\[ f(0,1) = 1 \]
+%\[ f(1,1) = 3 \]
+%\[ f(2,1) = 5 \]
+%\[ f(0,2) = 2 \]
+%
+%Mostrando claramente que $(2,1)$ es donde se alcanza el óptimo con un valor de $5$.
+%
+%\subsection*{b}
+%
+%Mirando el gráfico y conociendo cómo crece la función objetivo (más rápidamente en $x_1$ que en $x_2$), se obtiene el óptimo $46/7$ para $ x_1 = 18/7, x_2 = 6/7$.
+%
+%\subsection*{c}
+%
+%Un conjunto de restricciones que determina el casco convexo del problema es
+%
+%\[ x_1 \leq 2 \]
+%\[ x_1 + 2x_2 \leq 4 \]
+%
+%\begin{tikzpicture}
+%\begin{axis}[ 
+%xtick = {0,1,...,3},
+%ytick = {0,1,...,3},
+%grid = both,
+%xmin = 0,
+%xmax = 3,
+%ymin = 0,
+%ymax = 3,
+%xlabel=$x_1$,
+%ylabel={$x_2$}
+%] 
+%\addplot[mark=none] coordinates {(2, 0) (2, 3)};
+%\addplot[mark=none] {2 - x/2};  
+%\addplot[mark=*] coordinates {(0,0)};
+%\addplot[mark=*] coordinates {(1,0)};
+%\addplot[mark=*] coordinates {(2,0)};
+%\addplot[mark=*] coordinates {(0,1)};
+%\addplot[mark=*] coordinates {(1,1)};
+%\addplot[mark=*] coordinates {(2,1)};
+%\addplot[mark=*] coordinates {(0,2)};
+%\addplot[fill=lightgray,draw=none] coordinates {(0,0) (2,0) (2,1) (0,2) (0,0)};
+%\end{axis}
+%\end{tikzpicture}
+%
+%\section{Ejercicio 3}
+%
+%A través de análisis de casos de las $2^3$ posibilidades en cada caso, se determinan los conjuntos factibles.
+%
+%\[X_1 = X_2 = X_3=  \{(0,0,0), (0,0,1), (0,1,0), (1,0,0), (0,1,1)\}\]
+%
+%$P_2$ es el tetraedro de vértices $(0,0,0), (0,0,5/3), (0,5/2,0), (1,0,0)$, mientras que $P_3$ es también un tetraedro con vértices $(0,0,0), (0,0,3), (0,3/2,0), (1,0,0)$. Evidentemente, estos tetraedros no se encuentran uno incluido en el otro. Por otro lado, analíticamente:
+%
+%\[
+%x_1 + x_2 \leq 1 \to 2x_1 + 2x_2 \leq 2 
+%\]
+%\[
+%x_1 + x_3 \leq 1 \to 3x_1 + 3x_3 \leq 3
+%\]
+%Sumando esas ecuaciones se obtiene la condición de $P_2$, por lo que $x \in P_1 \to x \in P_2$, o sea $P_1 \subseteq P_2$. Además, sumando tres veces la primera restricción a la segunda, se obtiene
+%
+%\[
+%3x_1 + 4x_2 + x_3 \leq 3
+%\]
+%
+%Como $x_2$ es positiva, esa condición es más restrictiva que la condición de $P_3$, obteniéndose $P_1 \subseteq P_2$.
+% 
+%\section{Ejercicio 4}
+
+
+
+\end{document}          
+
+
